@@ -164,6 +164,17 @@ namespace Regression.FeatureModel
         private int GetCol(Worksheet ws)
         {
             Range = ws.UsedRange;
+            foreach (_Excel.Range r in Range.Columns)
+            {
+                if (r.Value2[1,1] == null)
+                {
+                    return r.Column;
+                }
+                else
+                {
+                    //i++;
+                }
+            }
             return Range.Columns.Count+1;
         }
         public void Exit()

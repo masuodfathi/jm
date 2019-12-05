@@ -14,6 +14,7 @@ namespace FeatureClass
         public List<string> ObsoleteTestCases = new List<string>();
         public List<int> reservedTestCases = new List<int>();
         public List<int> removedTest = new List<int>();
+        public List<int> ColOfRetestableTestcases;
         public string[,] matrixNewversion;
         List<string> TestName = new List<string>();
         int[,] InitMatrix;
@@ -111,10 +112,16 @@ namespace FeatureClass
 
         private void GetObsolete(List<Pair> removedPairs, List<string> testName)
         {
-            InitialMatrix(removedPairs);
-            List<int> cols = GetColNumber(InitMatrix);
-            cols = cols.Except(reservedTestCases).ToList();
-            ObsoleteTestCases = GetTestCasesOf(cols);
+            //InitialMatrix(removedPairs);
+            //List<int> cols = GetColNumber(InitMatrix);
+            List<int> cools = new List<int>();
+            for (int i = 0; i < CompairResualt.ChangedPairs[0].TestCases.Count; i++)
+            {
+                cools.Add(i);
+            }
+            //cols = cols.Except(reservedTestCases).ToList();
+            cools = cools.Except(reservedTestCases).ToList();
+            ObsoleteTestCases = GetTestCasesOf(cools);
         }
         private void GetReusable(List<Pair> samePairs, List<string> testName)
         {
@@ -127,7 +134,7 @@ namespace FeatureClass
         public void GetRetestable(List<Pair> ChangedPairs, List<string> _testCases)
         {
             InitialMatrix(ChangedPairs);//yek matrix az 0 o 1 haye mojod dar liste har pair ke marboot be changedpairs  hast ejad mikonad
-            List<int> cols = reservedTestCases = GetColNumber(InitMatrix);// shomare colume haye moaser bar roye changed pairhara peyda mikonad
+            List<int> cols = ColOfRetestableTestcases = reservedTestCases = GetColNumber(InitMatrix);// shomare colume haye moaser bar roye changed pairhara peyda mikonad
             Matrix = new int[ChangedPairs.Count, cols.Count];
             for (int i = 0; i < cols.Count; i++)
             {

@@ -32,10 +32,12 @@ namespace Regression.FeatureModel
         public double FDE;
 
         //Variable ee ke be sorate randome baraye arzyabi ejad shode(koromozom).
-        int[] Variable;
+        public int[] Variable;
 
         //pair haa ee ke da ravashe ma shenasaee shodan ke bayad test shavand.
         List<Pair> PairsNeedCover;
+
+        int PairsCount;
 
         public computingRandom()
         {
@@ -44,6 +46,7 @@ namespace Regression.FeatureModel
 
         public computingRandom(featureModel fmo,Compare co,FilterTestCase ft, int[] faults)
         {
+            PairsCount = fmo.Pairs.Count;
             TestNumber = fmo.testcases.Count();
             RetastAbleNumber = ft.RetestableTestCases.Count;
             PairsNeedCover = co.ChangedPairs;
@@ -68,7 +71,7 @@ namespace Regression.FeatureModel
                     pairs.Add(PairsNeedCover[i]);
                 }
             }
-            int[] faultsCovered = new int[pairs.Count];//that Faults which are covered.
+            int[] faultsCovered = new int[pairs.Count];//Faults which are covered.
             for (int i = 0; i < variable.Length; i++)
             {
                 if (variable[i] == 1)
@@ -173,23 +176,24 @@ namespace Regression.FeatureModel
             return Result;
         }
 
-        internal double GetReusability(List<Pair> initialSamePairs, List<int> reservedTestCases)
+        internal double GetReusability(List<Pair> pairs, List<int> testCases)
         {
+            List<int> cols = GetCols(testCases);
             double reusability = 0;
             
-            int I = initialSamePairs.Count;
-            int T = reservedTestCases.Count;
+            int I = pairs.Count;
+            int T = cols.Count;
             double[] Ii = new double[T];
 
-            int row = initialSamePairs.Count;
-            int col = reservedTestCases.Count;
+            int row = pairs.Count;
+            int col = cols.Count;
             string[,] matrix = new string[row , col];
 
             for (int i = 0; i < row; i++)
             {
                 for (int j = 0; j < col; j++)
                 {
-                    matrix[i, j] = initialSamePairs[i].TestCases[reservedTestCases[j]].ToString();
+                    matrix[i, j] = pairs[i].TestCases[cols[j]].ToString();
                 }
             }
             for (int x = 0; x < col; x++)
@@ -210,9 +214,63 @@ namespace Regression.FeatureModel
                 sum += Ii[i];
             }
             reusability = sum / (T * I);
-            reusability = Math.Round(reusability, 2);
+            reusability = Math.Round(reusability, 9);
             return reusability;
         }
+
+        private List<int> GetCols(List<int> testCases)
+        {
+            List<int> cols = new List<int>();
+            for (int i = 0; i < testCases.Count; i++)
+            {
+                if (testCases[i] == 1)
+                {
+                    cols.Add(i);
+                }
+            }
+            return cols;
+        }
+
+        //internal double GetReusability()
+        //{
+        //    double reusability = 0;
+
+        //    int I = PairsCount;
+        //    int T = TestNumber;
+        //    double[] Ii = new double[T];
+
+        //    int row = I;
+        //    int col = T;
+        //    string[,] matrix = new string[row, col];
+
+        //    for (int i = 0; i < row; i++)
+        //    {
+        //        for (int j = 0; j < col; j++)
+        //        {
+        //            matrix[i, j] = initialSamePairs[i].TestCases[reservedTestCases[j]].ToString();
+        //        }
+        //    }
+        //    for (int x = 0; x < col; x++)
+        //    {
+        //        int numberofOnes = 0;
+        //        for (int w = 0; w < row; w++)
+        //        {
+        //            if (matrix[w, x] == "1")
+        //            {
+        //                numberofOnes++;
+        //            }
+        //        }
+        //        Ii[x] = numberofOnes;
+        //    }
+        //    double sum = 0;
+        //    for (int i = 0; i < Ii.Length; i++)
+        //    {
+        //        sum += Ii[i];
+        //    }
+        //    reusability = sum / (T * I);
+        //    reusability = Math.Round(reusability, 2);
+        //    return reusability;
+        //}
 
         private string[,] setMatrix(string[,] matrix)
         {

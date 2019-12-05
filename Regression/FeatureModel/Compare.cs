@@ -11,7 +11,7 @@ namespace FeatureClass
         List<string> ChangedFeature = new List<string>();
         public List<string> TestName = new List<string>();
         public List<Pair> SamePairs = new List<Pair>();
-        public List<Pair> initialSamePairs = new List<Pair>();
+        public List<Pair> initialSamePairs = new List<Pair>();//non Removed pairs
         public List<Pair> NewPairs = new List<Pair>();
         public List<Pair> RemovedPairs = new List<Pair>();
         public List<Pair> ChangedPairs = new List<Pair>();

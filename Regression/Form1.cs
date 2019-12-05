@@ -21,6 +21,7 @@ namespace Regression
         {
             InitializeComponent();
         }
+        featureModel fmO;
         Compare compair;
         FilterTestCase filter;
         computingRandom RC;
@@ -54,7 +55,7 @@ namespace Regression
                 label1.Text = path;
 
                 OpenExcel a = new OpenExcel(label1.Text);
-                featureModel fmO = new featureModel(a.OldMatrix);
+                fmO = new featureModel(a.OldMatrix);
                 PaireSet newPairs = new PaireSet(a.newPairs);
                 compair = new Compare(fmO, newPairs, a.ChangedFeatureList);
                 filter = new FilterTestCase(compair);
@@ -92,6 +93,7 @@ namespace Regression
 
                 Faults = setFaults(compair.ChangedPairs.Count);
                 RC = new computingRandom(fmO, compair,filter,Faults);
+                double Randomreusability = RC.GetReusability(fmO.Pairs,RC.Variable.ToList());
                 LRCover.Text = RC.UnCoverage;
                 LRCost.Text = RC.Cost;
                 LRFDE.Text = RC.FDE.ToString();
@@ -103,8 +105,10 @@ namespace Regression
                 computingRandom mr = new computingRandom();
 
                 double MyFDE = mr.GetFDE(ourVariable, Faults, compair.ChangedPairs);
-                Reusability = mr.GetReusability(compair.initialSamePairs,filter.reservedTestCases);
+                double MyReusability = mr.GetReusability(compair.ChangedPairs, ourVariable.ToList());
+                Reusability = (MyReusability - Randomreusability) / Randomreusability;
                 MyFDE = Math.Round(MyFDE, 2);
+                Reusability = Math.Round(Reusability, 2);
                 Lcoverage.Text = algo[0];
                 Lcost.Text = algo[1].Trim();
                 LFDE.Text = MyFDE.ToString();
@@ -142,10 +146,11 @@ namespace Regression
                     tick3.ForeColor = Color.FromArgb(200, 80, 80);
                 }
                 //Appearence -------------------------------------------------------------
-                VersionEvaluation ve = new VersionEvaluation();
+                //VersionEvaluation ve = new VersionEvaluation();
                 //saveResult(path);
-
-
+                int numberOfSelectedTest = filter.ReUsableTestCases.Count + filter.RetestableTestCases.Count;
+                VersionEvaluation Ve = new VersionEvaluation(fmO.Pairs, compair.initialSamePairs,newPairs.PairsList.Count,numberOfSelectedTest,Faults , compair.ChangedPairs,MyFDE,MyReusability);
+                SaveVersionEval SEV = new SaveVersionEval(Ve.M5,Ve.M6,Ve.M7,Ve.M8);
                 Dolabel();
             }
         }
@@ -420,7 +425,7 @@ namespace Regression
 
         private void Button5_Click(object sender, EventArgs e)
         {
-            string path = @"C:\Users\masuo_esp0vb3\Desktop\jm\Evaluation\Evaluation.xlsx";
+            string path = @"C:\Users\masuo_esp0vb3\Desktop\jm\Evaluation\Evaluation-Q1.xlsx";
             
             string time = NSGAII.estimatedTime.ToString() + " ms";
             SaveEvaluation sv = new SaveEvaluation(path, Lcoverage.Text, Lcost.Text, LFDE.Text,LRCover.Text,LRCost.Text,LRFDE.Text,CurrentFileName,Reusability,time);
@@ -434,7 +439,7 @@ namespace Regression
             OpenFileDialog opndialog = new OpenFileDialog();
             if (opndialog.ShowDialog() == DialogResult.OK)
             {
-                string fileName = opndialog.FileName;
+                
             }
         }
     }
