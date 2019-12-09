@@ -62,7 +62,7 @@ namespace Regression.FeatureModel
         private double GetKeepedFDE()
         {
             double oldFde = GetFDE(FaultVariable);
-            double m = (FdeNew - oldFde) / oldFde;
+            double m = (FdeNew) / oldFde;
             return m;
         }
 
@@ -79,7 +79,7 @@ namespace Regression.FeatureModel
             double kc = 0;
             double newCover = GetCoverage(NewPairs, NumberOfnewPair);
             double oldCover = GetCoverage(OldPairs, OldPairs.Count);
-            kc = (newCover - oldCover) / oldCover;
+            kc = (newCover) / oldCover;
             return kc;
         }
 

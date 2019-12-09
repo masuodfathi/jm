@@ -1,11 +1,6 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
 using _Excel = Microsoft.Office.Interop.Excel;
 using System.Diagnostics;
 using FeatureClass;
@@ -28,14 +23,18 @@ namespace Regression.FeatureModel
         string MyCoverage;
         string MyCost;
         string MyFDE;
+        
         string RandCoverage;
         string RandCost;
         string RandFDE;
+        
         string FileName;
         string Reusability;
         string EstimateTime;
         string M9;
         string M10;
+        public string MyUsability { set; get; }
+        public string RandUsability { set; get; }
         public SaveEvaluation()
         {
 
@@ -69,15 +68,21 @@ namespace Regression.FeatureModel
             string[,] matrix = MakeArray();
 
             Range c1 = ws.Cells[1, col];
-            Range c2 = ws.Cells[14, col];
+            Range c2 = ws.Cells[16, col];
 
             ws.get_Range(c1, c2).Value2 = matrix;
             
-            int[] rowConvertToint = { 3, 4, 5, 7, 8, 9, 10, 11, 12, 13 ,14};
+            int[] rowConvertToint = { 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13 ,14, 15, 16};
             for (int i = 0; i < rowConvertToint.Length; i++)
             {
                 try
                 {
+                    if (i==4 || i==8)
+                    {
+                        ws.Cells[rowConvertToint[i], col].TextToColumns();
+                        ws.Cells[rowConvertToint[i], col].NumberFormat = "0.00000";
+                        continue;
+                    }
                     ws.Cells[rowConvertToint[i], col].TextToColumns();
                     ws.Cells[rowConvertToint[i], col].NumberFormat = "0.00";
                 }
@@ -95,23 +100,24 @@ namespace Regression.FeatureModel
 
         private string[,] MakeArray()
         {
-            string[,] M = new string[14,1];
+            string[,] M = new string[16,1];
             string filename = FileName;
             M[0,0] = filename;
             M[1, 0] = EstimateTime;
             M[2, 0] = MyCoverage;
             M[3, 0] = MyCost;
             M[4, 0] = MyFDE;
-            M[5, 0] = "_";
-            M[6, 0] = RandCoverage;
-            M[7, 0] = RandCost;
-            M[8, 0] = RandFDE;
-
-            M[9, 0] = M1();
-            M[10, 0] = M2();
-            M[11, 0] = M3();
-            M[12, 0] = Reusability;
-            M[13, 0] = M9Calculate();
+            M[5, 0] = MyUsability;
+            M[6, 0] = "_";
+            M[7, 0] = RandCoverage;
+            M[8, 0] = RandCost;
+            M[9, 0] = RandFDE;
+            M[10, 0] = RandUsability;
+            M[11, 0] = M1();
+            M[12, 0] = M2();
+            M[13, 0] = M3();
+            M[14, 0] = Reusability;
+            M[15, 0] = M9Calculate();
             
             return M;
             

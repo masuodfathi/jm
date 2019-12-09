@@ -146,11 +146,14 @@ namespace Regression
                     tick3.ForeColor = Color.FromArgb(200, 80, 80);
                 }
                 //Appearence -------------------------------------------------------------
-                //VersionEvaluation ve = new VersionEvaluation();
+                //SaveCompairViaRandom
+                SaveCompairViaRandom(MyReusability,Randomreusability);
                 //saveResult(path);
                 int numberOfSelectedTest = filter.ReUsableTestCases.Count + filter.RetestableTestCases.Count;
                 VersionEvaluation Ve = new VersionEvaluation(fmO.Pairs, compair.initialSamePairs,newPairs.PairsList.Count,numberOfSelectedTest,Faults , compair.ChangedPairs,MyFDE,MyReusability);
-                SaveVersionEval SEV = new SaveVersionEval(Ve.M5,Ve.M6,Ve.M7,Ve.M8);
+                SaveVersionEval SEV = new SaveVersionEval(Ve.M5,Ve.M6,Ve.M7,Ve.M8,CurrentFileName);
+                SEV.Run();
+
                 Dolabel();
             }
         }
@@ -433,7 +436,18 @@ namespace Regression
             sv.AllTestCount = compair.ChangedPairs[0].TestCases.Count;
             sv.Run();
         }
+        private void SaveCompairViaRandom(double myR,double randR)
+        {
+            string path = @"C:\Users\masuo_esp0vb3\Desktop\jm\Evaluation\Evaluation-Q1.xlsx";
 
+            string time = NSGAII.estimatedTime.ToString() + " ms";
+            SaveEvaluation sv = new SaveEvaluation(path, Lcoverage.Text, Lcost.Text, LFDE.Text, LRCover.Text, LRCost.Text, LRFDE.Text, CurrentFileName, Reusability, time);
+            sv.FilterTestCase = filter;
+            sv.AllTestCount = compair.ChangedPairs[0].TestCases.Count;
+            sv.MyUsability = myR.ToString();
+            sv.RandUsability = randR.ToString();
+            sv.Run();
+        }
         private void Button6_Click(object sender, EventArgs e)
         {
             OpenFileDialog opndialog = new OpenFileDialog();
