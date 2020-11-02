@@ -11,7 +11,8 @@ using JMetalRunners.NSGAII;
 using FeatureClass;
 using Regression.FeatureModel;
 using System.IO;
-
+using System.Security.Cryptography;
+using System.Threading;
 
 namespace Regression
 {
@@ -59,7 +60,9 @@ namespace Regression
                 PaireSet newPairs = new PaireSet(a.newPairs);
                 compair = new Compare(fmO, newPairs, a.ChangedFeatureList);
                 filter = new FilterTestCase(compair);
-                
+
+                Faults = setFaults(compair.ChangedPairs.Count);
+
                 List<string> list1Source = new List<string>();
                 for (int i = 0; i < compair.NewPairs.Count; i++)
                 {
@@ -76,9 +79,11 @@ namespace Regression
                 int[] rowcol = new int[2];
                 string[] arg = new string[1];
                 arg[0] = "Regression";
+                
                 rowcol[0] = filter.Matrix.GetLength(0);
                 rowcol[1] = filter.Matrix.GetLength(1);
                 NSGAII.Matrix = filter.Matrix;
+
                 NSGAII.RowCol = rowcol;
                 NSGAII.Main(arg);
 
@@ -90,8 +95,7 @@ namespace Regression
                 listBox9.DataSource = SeperateFun(fun);
                 
 
-
-                Faults = setFaults(compair.ChangedPairs.Count);
+                
                 RC = new computingRandom(fmO, compair,filter,Faults);
                 double Randomreusability = RC.GetReusability(fmO.Pairs,RC.Variable.ToList());
                 LRCover.Text = RC.UnCoverage;
@@ -105,7 +109,8 @@ namespace Regression
                 computingRandom mr = new computingRandom();
 
                 double MyFDE = mr.GetFDE(ourVariable, Faults, compair.ChangedPairs);
-                double MyReusability = mr.GetReusability(compair.ChangedPairs, ourVariable.ToList());
+                double MyReusability = mr.GetReusability(fmO.Pairs, ourVariable.ToList(), compair.ChangedPairs.Count);
+                //double MyReusability = mr.GetReusability(compair.ChangedPairs, ourVariable.ToList(),compair.ChangedPairs.Count);
                 Reusability = (MyReusability - Randomreusability) / Randomreusability;
                 MyFDE = Math.Round(MyFDE, 2);
                 Reusability = Math.Round(Reusability, 2);
@@ -148,12 +153,26 @@ namespace Regression
                 //Appearence -------------------------------------------------------------
                 //SaveCompairViaRandom
                 SaveCompairViaRandom(MyReusability,Randomreusability);
-                //saveResult(path);
-                int numberOfSelectedTest = filter.ReUsableTestCases.Count + filter.RetestableTestCases.Count;
-                VersionEvaluation Ve = new VersionEvaluation(fmO.Pairs, compair.initialSamePairs,newPairs.PairsList.Count,numberOfSelectedTest,Faults , compair.ChangedPairs,MyFDE,MyReusability);
+                saveResult(path);
+                //decimal newCover;
+                //decimal newCost;
+                //decimal newFDE;
+                //decimal newReusability;
+                int numberoftest = 0;
+                string variable = Var[0];
+                for (int i = 0; i < Var[0].Length; i++)
+                {
+                    if (variable[i].ToString() == "1")
+                    {
+                        numberoftest++;
+                    }
+                }
+                //int numberOfSelectedTest =  filter.RetestableTestCases.Count;
+                double newCover = 1 - Convert.ToDouble(algo[0]);
+                VersionEvaluation Ve = new VersionEvaluation(fmO.Pairs, compair.initialSamePairs, newPairs.PairsList.Count, numberoftest, Faults, compair.ChangedPairs, MyFDE, MyReusability, newCover);
                 SaveVersionEval SEV = new SaveVersionEval(Ve.M5,Ve.M6,Ve.M7,Ve.M8,CurrentFileName);
                 SEV.Run();
-
+                
                 Dolabel();
             }
         }
@@ -215,8 +234,10 @@ namespace Regression
             int[] f = new int[count];
             for (int i = 0; i < count; i++)
             {
-                int r = JMetalCSharp.Utils.JMetalRandom.Next(0, 10);
-                if (r <= 1)
+                int r = JMetalCSharp.Utils.JMetalRandom.Next(1, 5);
+                int r1 = JMetalCSharp.Utils.JMetalRandom.Next(1, 15);
+                
+                if (true)
                 {
                     f[i] = 1;
                 }
@@ -360,12 +381,19 @@ namespace Regression
 
         private void Button4_Click(object sender, EventArgs e)
         {
+            fmO = null;
+
+
+            RC = null;
+            
+            
             SaveFileDialog saveFlDialog = new SaveFileDialog();
             saveFlDialog.FileName = FileName;
             if (saveFlDialog.ShowDialog() == DialogResult.OK)
             {
-                saveFlDialog.FileName = FileName + "Version";
+                //saveFlDialog.FileName = FileName + "-V";
                 string path = saveFlDialog.FileName;
+                path += "-v";
                 writeToExcel wr = new writeToExcel(filter.matrixNewversion,compair.NewPairs,path);
             }
         }
@@ -428,9 +456,9 @@ namespace Regression
 
         private void Button5_Click(object sender, EventArgs e)
         {
-            string path = @"C:\Users\masuo_esp0vb3\Desktop\jm\Evaluation\Evaluation-Q1.xlsx";
-            
-            string time = NSGAII.estimatedTime.ToString() + " ms";
+            //string path = @"C:\Users\masuo_esp0vb3\Desktop\jm\Evaluation\Evaluation-Q1.xlsx";
+            string path = @"C:\Users\masuo_esp0vb3\Desktop\Evaluation-Q1.xlsx";
+            string time = NSGAII.estimatedTime.ToString();
             SaveEvaluation sv = new SaveEvaluation(path, Lcoverage.Text, Lcost.Text, LFDE.Text,LRCover.Text,LRCost.Text,LRFDE.Text,CurrentFileName,Reusability,time);
             sv.FilterTestCase = filter;
             sv.AllTestCount = compair.ChangedPairs[0].TestCases.Count;
@@ -438,9 +466,9 @@ namespace Regression
         }
         private void SaveCompairViaRandom(double myR,double randR)
         {
-            string path = @"C:\Users\masuo_esp0vb3\Desktop\jm\Evaluation\Evaluation-Q1.xlsx";
-
-            string time = NSGAII.estimatedTime.ToString() + " ms";
+            //string path = @"C:\Users\masuo_esp0vb3\Desktop\jm\Evaluation\Evaluation-Q1.xlsx";
+            string path = @"C:\Users\masuod\Desktop\Evaluation-Q1.xlsx";
+            string time = NSGAII.estimatedTime.ToString();
             SaveEvaluation sv = new SaveEvaluation(path, Lcoverage.Text, Lcost.Text, LFDE.Text, LRCover.Text, LRCost.Text, LRFDE.Text, CurrentFileName, Reusability, time);
             sv.FilterTestCase = filter;
             sv.AllTestCount = compair.ChangedPairs[0].TestCases.Count;

@@ -15,6 +15,8 @@ namespace Regression.FeatureModel
         double NumberselectedTest;
         int[] FaultVariable;
         List<Pair> ChangedPairs;
+        double newCover;
+        double newCost;
         double FdeNew;
         double NewReusability;
         public double M5;
@@ -29,8 +31,10 @@ namespace Regression.FeatureModel
         {
 
         }
-        public VersionEvaluation(List<Pair> _oldPairs , List<Pair> _newPairs , int newpairCount , int _numberselectedTest , int[] _faultVariable ,List<Pair> _changedPairs , double _fdeNew,double _newReusability)
+        public VersionEvaluation(List<Pair> _oldPairs , List<Pair> _newPairs , int newpairCount , int _numberselectedTest , int[] _faultVariable ,List<Pair> _changedPairs , double _fdeNew,double _newReusability, double _newCoverage)
         {
+            newCover = _newCoverage;
+            //newCost = _newCost;
             OldPairs = _oldPairs;
             NewPairs = _newPairs;
             NumberOfnewPair = newpairCount;
@@ -54,9 +58,8 @@ namespace Regression.FeatureModel
             }
             computingRandom cm = new computingRandom();
             double oldreusability = cm.GetReusability(OldPairs,oldtestList);
-            double R = (NewReusability - oldreusability) / oldreusability;
+            double R = NewReusability / oldreusability;
             return R;
-            throw new NotImplementedException();
         }
 
         private double GetKeepedFDE()
@@ -77,7 +80,8 @@ namespace Regression.FeatureModel
         private double GetKeepedCoverage()
         {
             double kc = 0;
-            double newCover = GetCoverage(NewPairs, NumberOfnewPair);
+
+            //double newCover = GetCoverage(NewPairs, NumberOfnewPair);
             double oldCover = GetCoverage(OldPairs, OldPairs.Count);
             kc = (newCover) / oldCover;
             return kc;

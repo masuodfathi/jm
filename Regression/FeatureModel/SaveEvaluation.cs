@@ -134,8 +134,16 @@ namespace Regression.FeatureModel
             int ReusibleCount = FilterTestCase.ReUsableTestCases.Count;
             int Retestablecount = FilterTestCase.RetestableTestCases.Count;
             int allTestCount = AllTestCount;
-
-            double a = (allTestCount - (Retestablecount + ReusibleCount)) / ObCount;
+            double a;
+            try
+            {
+                 a = (allTestCount - (Retestablecount + ReusibleCount)) / ObCount;
+            }
+            catch (Exception)
+            {
+                 a = 1;
+            }
+            
             M9 = Math.Round(a, 2).ToString();
             return M9;
         }

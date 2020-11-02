@@ -299,7 +299,7 @@
             // listBox8
             // 
             this.listBox8.FormattingEnabled = true;
-            this.listBox8.Location = new System.Drawing.Point(8, 655);
+            this.listBox8.Location = new System.Drawing.Point(8, 681);
             this.listBox8.Name = "listBox8";
             this.listBox8.Size = new System.Drawing.Size(1762, 121);
             this.listBox8.TabIndex = 24;
@@ -348,7 +348,7 @@
             this.label13.AutoSize = true;
             this.label13.BackColor = System.Drawing.Color.White;
             this.label13.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(11, 659);
+            this.label13.Location = new System.Drawing.Point(8, 660);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(79, 18);
             this.label13.TabIndex = 29;

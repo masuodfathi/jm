@@ -34,7 +34,7 @@ namespace Regression.FeatureModel
         //Variable ee ke be sorate randome baraye arzyabi ejad shode(koromozom).
         public int[] Variable;
 
-        //pair haa ee ke da ravashe ma shenasaee shodan ke bayad test shavand.
+        //pair haa ee ke dar ravashe ma shenasaee shodan ke bayad test shavand.
         List<Pair> PairsNeedCover;
 
         int PairsCount;
@@ -136,8 +136,12 @@ namespace Regression.FeatureModel
             string[] coverage = new string[PairsNeedCover.Count];
             for (int i = 0; i < TestNumber; i++)
             {
-                 variable[i] = Random();
-                 Random();
+                int xr = JMetalCSharp.Utils.JMetalRandom.Next(1, 2);
+                //int xr = Random(1);
+                if (xr == 1)
+                {
+                    variable[i] = xr;
+                }
             }
             Variable = variable;
             string[,] m = setMatrix(matrix);
@@ -153,6 +157,7 @@ namespace Regression.FeatureModel
                         if (PairsNeedCover[j].TestCases[i] == 1)
                         {
                             coverage[j] = "1";
+                            break;
                         } 
                     }
                 }
@@ -165,23 +170,32 @@ namespace Regression.FeatureModel
                     cov++;
                 }
             }
-            cov = cov / coverage.Count();
+            cov = cov / PairsNeedCover.Count;
             cost = cost / RetastAbleNumber;
             cov = 1 - cov;
-            cov = Math.Round(cov, 2);
-            cost = Math.Round(cost, 2);
+            cov = Math.Ceiling(cov * 100) / 100;
+            cost = Math.Ceiling(cost * 100) / 100;
+            
             List<double> Result = new List<double>();
             Result.Add(cov);
             Result.Add(cost);
             return Result;
         }
 
-        internal double GetReusability(List<Pair> pairs, List<int> testCases)
+        internal double GetReusability(List<Pair> pairs, List<int> testCases,int tedadPairs = 1)
         {
             List<int> cols = GetCols(testCases);
             double reusability = 0;
+            int I;
+            if (tedadPairs>1)
+            {
+                I = tedadPairs;
+            }
+            else
+            {
+                I = pairs.Count;
+            }
             
-            int I = pairs.Count;
             int T = cols.Count;
             double[] Ii = new double[T];
 

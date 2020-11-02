@@ -21,8 +21,8 @@ namespace Regression
         private double m7;
         private double m8;
         private string FileName;
-        const string Path = @"C:\Users\masuo_esp0vb3\Desktop\jm\Evaluation\Evaluation-Q2.xlsx";
-
+        //const string Path = @"C:\Users\masuo_esp0vb3\Desktop\jm\Evaluation\Evaluation-Q2.xlsx";
+        const string Path = @"C:\Users\masuod\Desktop\Evaluation-Q2.xlsx";
         public SaveVersionEval(double m5, double m6, double m7, double m8, string _fileName)
         {
             this.m5 = m5;

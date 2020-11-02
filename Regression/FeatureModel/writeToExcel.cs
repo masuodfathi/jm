@@ -300,7 +300,7 @@ namespace Regression.FeatureModel
             List<string> matrix = GenerateMatrix(pairs.Count, testcases.Count);
             Writepairs(pairs);
             Writetestcases(testcases);
-            WriteMatrix(matrix, pairs.Count, testcases.Count,WS1);
+            WriteMatrix(matrix, pairs.Count, testcases.Count, WS1);
         }
 
         private void WriteWorkSheet1(List<string> interactions)
@@ -493,7 +493,8 @@ namespace Regression.FeatureModel
             StartNumber++;
             List<string> testCases = new List<string>();
             int min = number / 3;
-            int max = number - min;
+            //int max = number - min;
+            int max = number;
             min = (min == 0) ? 1 : min;
             
             int numberOfTest = Random(min, max);
@@ -514,7 +515,7 @@ namespace Regression.FeatureModel
             }
             catch (Exception e)
             {
-                throw;
+                
             }
             
         }

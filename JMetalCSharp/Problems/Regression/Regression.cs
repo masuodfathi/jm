@@ -66,7 +66,7 @@ namespace JMetalCSharp.Problems.Regression
             {
                 if (x.GetValue(var) >= 1)
                 {
-                    double xe = x.GetValue(var);//check
+                    
                     cost++;
                     for (int i = 0; i < numberOfPairs; i++)
                     {
