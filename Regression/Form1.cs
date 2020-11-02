@@ -91,6 +91,7 @@ namespace Regression
                 List<string> fun = new List<string>();
                 Var = NSGAII.variables;
                 fun = NSGAII.fun;
+                
                 listBox8.DataSource = Var;
                 listBox9.DataSource = SeperateFun(fun);
                 
