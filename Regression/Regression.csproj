@@ -101,7 +101,6 @@
     <Compile Include="FeatureModel\PaireSet.cs" />
     <Compile Include="FeatureModel\SaveEvaluation.cs" />
     <Compile Include="FeatureModel\SaveResult.cs" />
-    <Compile Include="FeatureModel\SortFun.cs" />
     <Compile Include="FeatureModel\SPLOT-Reader.cs" />
     <Compile Include="FeatureModel\TestCase.cs" />
     <Compile Include="FeatureModel\VersionEvaluation.cs" />

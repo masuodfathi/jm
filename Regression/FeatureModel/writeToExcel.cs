@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using FeatureClass;
 using System.Text.RegularExpressions;
+using JMetalCSharp.Metaheuristics.NSGAII;
 
 namespace Regression.FeatureModel
 {
@@ -435,12 +436,12 @@ namespace Regression.FeatureModel
             int c = 0;
             string[,] matrixTest = new string[row, col];
 
-            for (int i = 0; i < row; i++)
+            for (int i = 0; i < col; i++)
             {
-                for (int j = 0; j < col; j++)
+                for (int j = 0; j < row; j++)
                 {
                     //Write(WS1, i+2, j+2, matrix[c]);
-                    matrixTest[i, j] = matrix[c];
+                    matrixTest[j, i] = matrix[c];
                     c++;
                 }
             }
@@ -474,17 +475,44 @@ namespace Regression.FeatureModel
         {
             int length = pairsCount * testcasescount;
             List<string> value = new List<string>();
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < testcasescount; i++)
             {
-                int r = Random(0,testcasescount/2);
-                string m = "0";
-                if (r < 1)
+                int numbersOfOnes = Random(0, 40);
+                switch (numbersOfOnes)
                 {
-                    m = "1";
+                    case 15:
+                        numbersOfOnes = 35;
+                        break;
+                    case 12:
+                        numbersOfOnes = 20;
+                        break;
+                    case 6:
+                        numbersOfOnes = 45;
+                        break;
+                    case 3:
+                        numbersOfOnes = 4;
+                        break;
+                    case 11:
+                        numbersOfOnes = 3;
+                        break;
+                    default:
+                        numbersOfOnes = 1;
+                        break;
                 }
-                value.Add(m);
-                 
+                for(int j = 0; j < pairsCount; j++)
+                {
+                    int v = Random(0, pairsCount / numbersOfOnes);
+
+                    string m = "0";
+                    if (v < 1)
+                    {
+                        m = "1";
+                    }
+                    value.Add(m);
+                }
+
             }
+            
             return value;
         }
 
@@ -492,9 +520,9 @@ namespace Regression.FeatureModel
         {
             StartNumber++;
             List<string> testCases = new List<string>();
-            int min = number / 3;
+            int min = number;
             //int max = number - min;
-            int max = number;
+            int max = number*3;
             min = (min == 0) ? 1 : min;
             
             int numberOfTest = Random(min, max);

@@ -134,13 +134,15 @@ namespace Regression.FeatureModel
             double cost = 0;
             int[] variable = new int[TestNumber];
             string[] coverage = new string[PairsNeedCover.Count];
+            int onescount = JMetalCSharp.Utils.JMetalRandom.Next(2, 8);
             for (int i = 0; i < TestNumber; i++)
             {
-                int xr = JMetalCSharp.Utils.JMetalRandom.Next(1, 2);
+                
+                int xr = JMetalCSharp.Utils.JMetalRandom.Next(1, onescount);
                 //int xr = Random(1);
                 if (xr == 1)
                 {
-                    variable[i] = xr;
+                    variable[i] = 1;
                 }
             }
             Variable = variable;
@@ -157,7 +159,6 @@ namespace Regression.FeatureModel
                         if (PairsNeedCover[j].TestCases[i] == 1)
                         {
                             coverage[j] = "1";
-                            break;
                         } 
                     }
                 }

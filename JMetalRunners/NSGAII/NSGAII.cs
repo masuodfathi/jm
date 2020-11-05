@@ -82,8 +82,8 @@ namespace JMetalRunners.NSGAII
 			//algorithm = new ssNSGAII(problem);
 
 			// Algorithm parameters
-			algorithm.SetInputParameter("populationSize", 100);//100
-			algorithm.SetInputParameter("maxEvaluations", 25000);//25000
+			algorithm.SetInputParameter("populationSize", 400);//100
+			algorithm.SetInputParameter("maxEvaluations", 105000);//25000
 
 			// Mutation and Crossover for Real codification 
 			parameters = new Dictionary<string, object>();

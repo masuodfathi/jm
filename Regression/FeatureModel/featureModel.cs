@@ -57,7 +57,7 @@ namespace FeatureClass
             //List<string> features = new List<string>();
             for (int i = 0; i < pair.Count; i++)
             {
-                string[] f = pair[i].Split(',');
+                string[] f =  pair[i].Split(',');
                 for (int j = 0; j < f.Length; j++)
                 {
                     featureString.Add(f[j]);

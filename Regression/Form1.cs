@@ -91,7 +91,7 @@ namespace Regression
                 List<string> fun = new List<string>();
                 Var = NSGAII.variables;
                 fun = NSGAII.fun;
-                
+                //fun.Sort();
                 listBox8.DataSource = Var;
                 listBox9.DataSource = SeperateFun(fun);
                 
@@ -106,7 +106,8 @@ namespace Regression
 
                 int[] ourVariable = new int[compair.TestName.Count];
                 ourVariable = SetOurVariable(filter.removedTest, Var[0]);
-
+                
+                
                 computingRandom mr = new computingRandom();
 
                 double MyFDE = mr.GetFDE(ourVariable, Faults, compair.ChangedPairs);
@@ -155,10 +156,7 @@ namespace Regression
                 //SaveCompairViaRandom
                 SaveCompairViaRandom(MyReusability,Randomreusability);
                 saveResult(path);
-                //decimal newCover;
-                //decimal newCost;
-                //decimal newFDE;
-                //decimal newReusability;
+      
                 int numberoftest = 0;
                 string variable = Var[0];
                 for (int i = 0; i < Var[0].Length; i++)
@@ -198,34 +196,6 @@ namespace Regression
             {
                 t[i] = variable[i];
             }
-
-            ///////////////////////////////////////////////////////////////////Test  
-            //List<string> tname = new List<string>();
-            //for (int i = 0; i < compair.ChangedPairs[0].TestCases.Count; i++)
-            //{
-            //    if (variable[i] == 1)
-            //    {
-            //        tname.Add(compair.TestName[i]);
-            //    }
-                
-            //}
-            //List<string> tname1 = new List<string>();
-            //for (int i = 0; i < v.Length; i++)
-            //{
-            //    if (v[i].ToString() == "1")
-            //    {
-            //        tname1.Add(filter.RetestableTestCases[i]);
-            //    }
-            //}
-
-            //for (int i = 0; i < tname.Count; i++)
-            //{
-            //    if (tname[i] != tname1[i])
-            //    {
-            //        int a = 0;
-            //    }
-            //}
-
 
             return t;
         }
@@ -484,6 +454,21 @@ namespace Regression
             {
                 
             }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void listBox10_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
